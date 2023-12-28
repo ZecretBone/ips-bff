@@ -36,6 +36,15 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 export PATH="$PATH:$(go env GOPATH)/bin"
 ```
 
+#### Install Wiregen (Dependency injection)
+
+**using golang**
+```
+go install github.com/google/wire/cmd/wire@latest
+```
+
+> Ref: https://github.com/google/wire
+
 ### Setup Environment File
 filename: `.env.<envname>` eg. `.env.beta`
 > **Hint:** you can use .env.example as a references on what environment variable need to be set
