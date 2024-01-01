@@ -5,7 +5,8 @@ Backend server that stay in between front end and services.
 ## Table of Content
 - [Quick Start](#quick-start)
     - [Install Dependency](#install-bufbuild)
-    - [Setup Env file]()
+    - [Pull Git submodule](#pull-git-submodule)
+    - [Setup Local Env]()
     - [Setup Debug Tools (vscode)](#install-protoc)
 - [Protobuf Info](#protobuf-structure)
     - [Structure](#structure)
@@ -36,17 +37,21 @@ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 export PATH="$PATH:$(go env GOPATH)/bin"
 ```
 
-#### Install Wiregen (Dependency injection)
+### Pull Git Submodule
+using this command ```git submodule update --recursive --remote```
 
-**using golang**
-```
-go install github.com/google/wire/cmd/wire@latest
-```
+### Setup Local Env
 
-> Ref: https://github.com/google/wire
+#### Option 1 : using make command
 
-### Setup Environment File
-filename: `.env.<envname>` eg. `.env.beta`
+command : `make initbeta`
+
+
+#### Option 2 : Manual
+
+1. Copy `.env.example` to `.env.beta`
+2. Fill up unfill variable inside
+3. Run `make initmongo`
 > **Hint:** you can use .env.example as a references on what environment variable need to be set
 
 ### Setup Debug in Vscode
@@ -62,20 +67,20 @@ copy and paste this code into the file.
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "bff-grpc",
+            "name": "rssi-grpc",
             "type": "go",
             "request": "launch",
             "mode": "debug",
             "envFile": "${workspaceFolder}/.env.beta",
-            "program": "cmd/bff-grpc/main.go",
+            "program": "cmd/rssi-grpc/main.go",
         },
         {
-            "name": "bff-api",
+            "name": "rssi-api",
             "type": "go",
             "request": "launch",
             "mode": "debug",
             "envFile": "${workspaceFolder}/.env.beta",
-            "program": "cmd/bff-api/main.go",
+            "program": "cmd/rssi-api/main.go",
         }
     ]
 }
