@@ -10,14 +10,18 @@ import (
 	"github.com/RyuChk/wire-provider/gin/provider"
 	"github.com/ZecretBone/ips-bff/cmd/bff-api/handler"
 	"github.com/ZecretBone/ips-bff/cmd/bff-api/server"
+	"github.com/ZecretBone/ips-bff/internal/config"
 	"github.com/ZecretBone/ips-bff/internal/di"
+	"github.com/ZecretBone/ips-bff/internal/repository/RSSIClient"
 	"github.com/google/wire"
 )
 
 // Injectors from di.go:
 
 func InitializeContainer() (*Container, func(), error) {
-	rssiHandler := handler.ProvideRSSIHandler()
+	grpcConfig := config.ProvideGRPCServiceConfig()
+	service := rssiclient.ProvideRSSIService(grpcConfig)
+	rssiHandler := handler.ProvideRSSIHandler(service)
 	handlers := handler.Handlers{
 		RSSI: rssiHandler,
 	}

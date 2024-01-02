@@ -19,6 +19,10 @@ type CacheConfig struct {
 	HardMaxCacheSize int `envconfig:"CACHE_MAX_SIZE" default:"512"`
 }
 
+type GRPCConfig struct {
+	RSSIGRPCHost string `envconfig:"RSSI_GRPC_HOST" required:"true"`
+}
+
 type MinioConfig struct {
 	Bucket string `envconfig:"MINIO_BUCKET" default:"document-service"`
 }

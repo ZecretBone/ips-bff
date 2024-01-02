@@ -21,9 +21,9 @@ import (
 func InitializeContainer() (*Container, func(), error) {
 	rssiServiceConfig := config.ProvideRSSIConfig()
 	service := rssi.ProvideRSSIService(rssiServiceConfig)
-	rssiServiceServer := handler.ProvideBFFServer(service)
+	bffServiceServer := handler.ProvideBFFServer(service)
 	handlers := &handler.Handlers{
-		RSSI: rssiServiceServer,
+		RSSI: bffServiceServer,
 	}
 	grpcServerCustomizer := server.ProvideGRPCServerCustomizer(handlers)
 	grpcServer, cleanup, err := provider.ProvideGRPCServer(grpcServerCustomizer)

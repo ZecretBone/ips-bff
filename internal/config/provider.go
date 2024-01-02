@@ -10,6 +10,10 @@ func ProvideMongoxConfig() wiremongo.Config {
 	return provideConfig(wiremongo.Config{})
 }
 
+func ProvideGRPCServiceConfig() GRPCConfig {
+	return provideConfig(GRPCConfig{})
+}
+
 func ProvideMinioXConfig() wireminio.Config {
 	return provideConfig(wireminio.Config{})
 }
