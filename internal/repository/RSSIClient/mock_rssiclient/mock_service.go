@@ -36,10 +36,10 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // CollectData mocks base method.
-func (m *MockService) CollectData(ctx context.Context, body *v1.DataCollectionRequest) (*v1.DataCollectionResponse, error) {
+func (m *MockService) CollectData(ctx context.Context, body *v1.CollectDataRequest) (*v1.CollectDataResponse, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CollectData", ctx, body)
-	ret0, _ := ret[0].(*v1.DataCollectionResponse)
+	ret0, _ := ret[0].(*v1.CollectDataResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -25,24 +25,30 @@ func ProvideRSSIHandler(rssiClient rssiclient.Service) RSSIHandler {
 }
 
 func (rs *rssiHandler) Get(ctx *gin.Context) {
-	body := v1.DataCollectionRequest{
+	body := v1.CollectDataRequest{
 		Signals: []*rssiv1.RSSI{
 			{
-				Ssid:        "testing",
+				Ssid:        "newtONE",
+				MacAddress:  "ab:cd:ef:gh:xy:xz",
 				Strength:    60.3,
 				PollingRate: 300,
 				CreatedAt:   timestamppb.Now(),
 			}, {
-				Ssid:        "testing-2",
+				Ssid:        "newtTWO",
+				MacAddress:  "ab:cd:ef:gh:xy:x1",
 				Strength:    50.3,
 				PollingRate: 300,
 				CreatedAt:   timestamppb.Now(),
 			},
 		},
+		DeviceInfo: &rssiv1.DeviceInfo{
+			DeviceId: "FXM1234",
+			Models:   "androidOreo123",
+		},
 		Stage: rssiv1.StatCollectionStage_STAT_COLLECTION_STAGE_MULTIPLE,
 		Position: &rssiv1.Position{
-			X: 1,
-			Y: 1,
+			X: 3,
+			Y: 2,
 			Z: 1,
 		},
 		Duration:  10,

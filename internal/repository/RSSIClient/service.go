@@ -11,7 +11,7 @@ import (
 
 //go:generate mockgen -source=service.go -destination=mock_rssiclient/mock_service.go -package=mock_rssiclient
 type Service interface {
-	CollectData(ctx context.Context, body *v1.DataCollectionRequest) (*v1.DataCollectionResponse, error)
+	CollectData(ctx context.Context, body *v1.CollectDataRequest) (*v1.CollectDataResponse, error)
 }
 
 type RSSIGRPCClientService struct {
@@ -30,7 +30,7 @@ func ProvideRSSIService(config config.GRPCConfig) Service {
 	}
 }
 
-func (s *RSSIGRPCClientService) CollectData(ctx context.Context, body *v1.DataCollectionRequest) (*v1.DataCollectionResponse, error) {
+func (s *RSSIGRPCClientService) CollectData(ctx context.Context, body *v1.CollectDataRequest) (*v1.CollectDataResponse, error) {
 	res, err := s.client.CollectData(ctx, body)
 	if err != nil {
 		return nil, err
