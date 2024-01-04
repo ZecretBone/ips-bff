@@ -13,7 +13,8 @@ import (
 )
 
 type RSSIHandler interface {
-	Get(ctx *gin.Context)
+	GetCoordinateHandler(ctx *gin.Context)
+	CollectDataHandler(ctx *gin.Context)
 }
 
 type rssiHandler struct {
@@ -47,7 +48,7 @@ func (rs *rssiHandler) GetCoordinateHandler(ctx *gin.Context) {
 	}
 }
 
-func (rs *rssiHandler) Get(ctx *gin.Context) {
+func (rs *rssiHandler) CollectDataHandler(ctx *gin.Context) {
 	var body v1.CollectDataRequest
 	if err := ctx.BindJSON(&body); err != nil {
 		//err
