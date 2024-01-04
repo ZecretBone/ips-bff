@@ -12,7 +12,8 @@ import (
 	"github.com/ZecretBone/ips-bff/cmd/bff-api/server"
 	"github.com/ZecretBone/ips-bff/internal/config"
 	"github.com/ZecretBone/ips-bff/internal/di"
-	"github.com/ZecretBone/ips-bff/internal/repository/RSSIClient"
+	rssiclient2 "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/rssi"
+	"github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/stat"
 	"github.com/google/wire"
 )
 
@@ -21,7 +22,8 @@ import (
 func InitializeContainer() (*Container, func(), error) {
 	grpcConfig := config.ProvideGRPCServiceConfig()
 	service := rssiclient.ProvideRSSIService(grpcConfig)
-	rssiHandler := handler.ProvideRSSIHandler(service)
+	rssiclientService := rssiclient2.ProvideRSSIService(grpcConfig)
+	rssiHandler := handler.ProvideRSSIHandler(service, rssiclientService)
 	handlers := handler.Handlers{
 		RSSI: rssiHandler,
 	}

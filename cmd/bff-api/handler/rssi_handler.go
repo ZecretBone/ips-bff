@@ -6,7 +6,8 @@ import (
 
 	v1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/rssi/v1"
 	rssiv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/shared/rssi/v1"
-	rssiclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient"
+	rssiclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/rssi"
+	rssistatclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/stat"
 	"github.com/gin-gonic/gin"
 	//"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -16,12 +17,33 @@ type RSSIHandler interface {
 }
 
 type rssiHandler struct {
-	rssiClient rssiclient.Service
+	rssiStatClient rssistatclient.Service
+	rssiClient     rssiclient.Service
 }
 
-func ProvideRSSIHandler(rssiClient rssiclient.Service) RSSIHandler {
+func ProvideRSSIHandler(rssiStatClient rssistatclient.Service, rssiClient rssiclient.Service) RSSIHandler {
 	return &rssiHandler{
-		rssiClient: rssiClient,
+		rssiStatClient: rssiStatClient,
+		rssiClient:     rssiClient,
+	}
+}
+
+func (rs *rssiHandler) GetCoordinateHandler(ctx *gin.Context) {
+	var body v1.GetCoordinateRequest
+	if err := ctx.BindJSON(&body); err != nil {
+		//err
+		fmt.Println("theres error in binding json")
+	}
+	a := ctx.GetHeader("DeviceId")
+	b := ctx.GetHeader("Models")
+
+	body.DeviceInfo = &rssiv1.DeviceInfo{
+		DeviceId: a,
+		Models:   b,
+	}
+
+	if _, err := rs.rssiClient.GetCoordinate(ctx, &body); err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
 	}
 }
 
@@ -34,8 +56,6 @@ func (rs *rssiHandler) Get(ctx *gin.Context) {
 	body.Stage = rssiv1.StatCollectionStage_STAT_COLLECTION_STAGE_MULTIPLE
 	a := ctx.GetHeader("DeviceId")
 	b := ctx.GetHeader("Models")
-	c := ctx.GetHeader("Goose")
-	fmt.Println(c)
 
 	body.DeviceInfo = &rssiv1.DeviceInfo{
 		DeviceId: a,
@@ -72,7 +92,7 @@ func (rs *rssiHandler) Get(ctx *gin.Context) {
 	// 	EndedAt:   timestamppb.Now(),
 	// 	CreatedAt: timestamppb.Now(),
 	// }
-	if _, err := rs.rssiClient.CollectData(ctx, &body); err != nil {
+	if _, err := rs.rssiStatClient.CollectData(ctx, &body); err != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
 	}
 }
