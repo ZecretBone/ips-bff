@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CoordinateCollectionServiceClient interface {
 	GetCoordinate(ctx context.Context, in *GetCoordinateRequest, opts ...grpc.CallOption) (*GetCoordinateResponse, error)
+	RegisterAp(ctx context.Context, in *RegisterApRequest, opts ...grpc.CallOption) (*RegisterApResponse, error)
 }
 
 type coordinateCollectionServiceClient struct {
@@ -42,11 +43,21 @@ func (c *coordinateCollectionServiceClient) GetCoordinate(ctx context.Context, i
 	return out, nil
 }
 
+func (c *coordinateCollectionServiceClient) RegisterAp(ctx context.Context, in *RegisterApRequest, opts ...grpc.CallOption) (*RegisterApResponse, error) {
+	out := new(RegisterApResponse)
+	err := c.cc.Invoke(ctx, "/ips.rssi.v1.CoordinateCollectionService/RegisterAp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CoordinateCollectionServiceServer is the server API for CoordinateCollectionService service.
 // All implementations must embed UnimplementedCoordinateCollectionServiceServer
 // for forward compatibility
 type CoordinateCollectionServiceServer interface {
 	GetCoordinate(context.Context, *GetCoordinateRequest) (*GetCoordinateResponse, error)
+	RegisterAp(context.Context, *RegisterApRequest) (*RegisterApResponse, error)
 	mustEmbedUnimplementedCoordinateCollectionServiceServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedCoordinateCollectionServiceServer struct {
 
 func (UnimplementedCoordinateCollectionServiceServer) GetCoordinate(context.Context, *GetCoordinateRequest) (*GetCoordinateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCoordinate not implemented")
+}
+func (UnimplementedCoordinateCollectionServiceServer) RegisterAp(context.Context, *RegisterApRequest) (*RegisterApResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterAp not implemented")
 }
 func (UnimplementedCoordinateCollectionServiceServer) mustEmbedUnimplementedCoordinateCollectionServiceServer() {
 }
@@ -89,6 +103,24 @@ func _CoordinateCollectionService_GetCoordinate_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CoordinateCollectionService_RegisterAp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterApRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CoordinateCollectionServiceServer).RegisterAp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ips.rssi.v1.CoordinateCollectionService/RegisterAp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CoordinateCollectionServiceServer).RegisterAp(ctx, req.(*RegisterApRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CoordinateCollectionService_ServiceDesc is the grpc.ServiceDesc for CoordinateCollectionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -99,6 +131,10 @@ var CoordinateCollectionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCoordinate",
 			Handler:    _CoordinateCollectionService_GetCoordinate_Handler,
+		},
+		{
+			MethodName: "RegisterAp",
+			Handler:    _CoordinateCollectionService_RegisterAp_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

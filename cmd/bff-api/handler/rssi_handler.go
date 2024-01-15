@@ -13,8 +13,9 @@ import (
 )
 
 type RSSIHandler interface {
-	GetCoordinateHandler(ctx *gin.Context)
-	CollectDataHandler(ctx *gin.Context)
+	GetCoordinate(ctx *gin.Context)
+	CollectData(ctx *gin.Context)
+	RegisterAp(ctx *gin.Context)
 }
 
 type rssiHandler struct {
@@ -29,7 +30,7 @@ func ProvideRSSIHandler(rssiStatClient rssistatclient.Service, rssiClient rssicl
 	}
 }
 
-func (rs *rssiHandler) GetCoordinateHandler(ctx *gin.Context) {
+func (rs *rssiHandler) GetCoordinate(ctx *gin.Context) {
 	var body v1.GetCoordinateRequest
 	if err := ctx.BindJSON(&body); err != nil {
 		//err
@@ -48,7 +49,22 @@ func (rs *rssiHandler) GetCoordinateHandler(ctx *gin.Context) {
 	}
 }
 
-func (rs *rssiHandler) CollectDataHandler(ctx *gin.Context) {
+func (rs *rssiHandler) RegisterAp(ctx *gin.Context) {
+	var body v1.RegisterApRequest
+	if err := ctx.BindJSON(&body); err != nil {
+		//err
+		fmt.Println("theres error in binding json")
+	}
+	fmt.Println("gin")
+	fmt.Println(ctx)
+	fmt.Println(&body)
+
+	if _, err := rs.rssiClient.RegisterAp(ctx, &body); err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+	}
+}
+
+func (rs *rssiHandler) CollectData(ctx *gin.Context) {
 	var body v1.CollectDataRequest
 	if err := ctx.BindJSON(&body); err != nil {
 		//err

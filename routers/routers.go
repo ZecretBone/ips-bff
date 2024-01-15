@@ -25,7 +25,8 @@ func RegisterRouter(router *gin.Engine, handlers handler.Handlers) {
 	}))
 	rssiV1 := router.Group("/api/v1/rssi")
 	{
-		rssiV1.POST("/collectdata", handlers.RSSI.CollectDataHandler)
-		rssiV1.GET("/getcoordinate", handlers.RSSI.GetCoordinateHandler)
+		rssiV1.POST("/collectdata", handlers.RSSI.CollectData)
+		rssiV1.GET("/getcoordinate", handlers.RSSI.GetCoordinate)
+		rssiV1.POST("/registerap", handlers.RSSI.RegisterAp)
 	}
 }
